@@ -1,5 +1,17 @@
 # INSTALACION SERVIDORES EN UBUNTU
 ---
+# Título de la práctica: Servidor Ubuntu con servicios web, FTP y SSH
+
+## Datos identificativos
+
+* **Nombre y apellidos:** Antonio Manuel Perez Gomez
+  
+* **Fecha:** 18 de marzo de 2026
+   ## Descripción del entorno de virtualización utilizado
+* **Hipervisor:** Máquina virtual ejecutada en un portátil (equipo anfitrión).
+* **Red y Conectividad:** La máquina virtual se configuró usando un **Adaptador Puente** para obtener una IP local de la misma red que el anfitrión (IP asignada: `192.168.1.205`), lo que permite el acceso directo a servicios como SSH, FTP y Apache.
+* **Sistema Operativo:** Ubuntu Server.
+* **Software cliente en el anfitrión:** FileZilla para la transferencia de archivos mediante FTP.
 
 ## Usuarios
 1.  usuario: manup --> contraseña: manup
@@ -103,3 +115,13 @@
 
 1. Copia el proyecto a Apache: `sudo cp -R /home/usuarioftp/nombre_proyecto/* /var/www/html/`
 2. La web estará disponible usando la IP del servidor.
+
+## Breve reflexión final
+### Dificultades encontradas
+Durante la configuración, uno de los puntos más delicados fue la correcta asignación de permisos para la transferencia de archivos. Al usar FileZilla para subir el proyecto, pueden surgir errores de permisos de escritura, los cuales se solucionaron ajustando el propietario del directorio de destino (`sudo chown -R usuarioftp:usuarioftp /home/usuarioftp`). Además, la configuración de seguridad del servidor FTP requirió ajustes específicos en `vsftpd.conf` (como `chroot_local_user` y `allow_writeable_chroot=YES`) para enjaular al usuario de forma segura permitiendo la escritura.
+
+### Aprendizajes obtenidos
+A lo largo de esta práctica he aprendido a desplegar un entorno de servidor web completo desde cero. Los principales aprendizajes incluyen:
+* **Gestión de servicios y firewall:** Instalación, habilitación e inicio automático de servicios clave (SSH, Apache2 y vsftpd), así como la apertura de sus respectivos puertos en el cortafuegos UFW.
+* **Administración de usuarios:** Creación de usuarios con propósitos específicos (`usuarioftp` para transferencias y `usuariossh` para administración remota), incluyendo la adición de usuarios al grupo `sudo`.
+* **Flujo de despliegue web:** Comprender el proceso completo de subir un proyecto web de forma remota (usando FileZilla hacia el directorio local del usuario FTP) y posteriormente moverlo al directorio público de Apache (`/var/www/html/`) para que esté accesible vía web.
